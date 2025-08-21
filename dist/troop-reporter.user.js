@@ -4,8 +4,8 @@
 // @version      3.4.2
 // @description  Coleta Grepolis -> Sheets (snapshot), 6/6h. Lê endpoint+version de um Gist (JSON)...
 // @match        https://*.grepolis.com/*
-// @updateURL    https://raw.githubusercontent.com/<user>/<repo>/main/dist/troop-reporter.user.js
-// @downloadURL  https://raw.githubusercontent.com/<user>/<repo>/main/dist/troop-reporter.user.js
+// @updateURL    https://github.com/ttibau/grepo-troop-reporter/raw/refs/heads/main/dist/troop-reporter.user.js
+// @downloadURL  https://github.com/ttibau/grepo-troop-reporter/raw/refs/heads/main/dist/troop-reporter.user.js
 // @run-at       document-idle
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
