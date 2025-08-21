@@ -41,7 +41,6 @@
     /*** STORAGE KEYS ***/
     function lastSentKey(world)   { return `last_sent_${world || 'unknown'}`; }
     function historyKey(world)    { return `send_history_${world || 'unknown'}`; }
-    function allianceCacheKey(w)  { return `alli_name_${w || 'unknown'}`; }
     const GIST_VER_KEY = 'gist_version_local';
     const GIST_URL_KEY = 'gist_endpoint_url';
     const TOGGLE_POS_KEY = 'toggle_pos';
@@ -174,25 +173,21 @@
       const env = envOpt || getEnvSync();
       const world = env.world;
       const last = Number(GM_getValue(lastSentKey(world), 0));
-      const alli = env.alliance || GM_getValue(allianceCacheKey(world), '—');
       const html = `
         <div><b>Mundo:</b> ${world || '—'}</div>
         <div><b>Jogador:</b> ${env.player || '—'}</div>
-        <div><b>Aliança:</b> ${alli}</div>
+        <div><b>Aliança:</b> ${env.alliance || '—'}</div>
         <div><b>Último envio:</b> ${last ? Math.floor(msSince(last)/60000)+' min atrás' : '—'}</div>
       `;
       const box = document.querySelector('#gp-env');
       if (box) box.innerHTML = html;
     }
   
-    /*** ENV (async) — preenche aliança se vazia ***/
+    /*** ENV (async) — sempre busca nome da aliança atualizado ***/
     async function getEnvAsync() {
       const env = getEnvSync();
-      if (env.alliance) { updateEnvPanel(env); return env; }
-  
-      const cached = GM_getValue(allianceCacheKey(env.world), '');
-      if (cached) { env.alliance = cached; updateEnvPanel(env); return env; }
-  
+      
+      // Sempre busca o nome da aliança atualizado (sem cache)
       await waitForGameReady();
       const liAlliance = document.querySelector('li.alliance.main_menu_item');
       if (liAlliance) {
@@ -206,7 +201,6 @@
         const name = await readAllianceNameFromDialog(7000);
         if (name) {
           env.alliance = name;
-          GM_setValue(allianceCacheKey(env.world), name);
           updateEnvPanel(env);
         }
         closeDialogContaining('.settings_column');
